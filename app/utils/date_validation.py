@@ -24,5 +24,5 @@ class DateValidators:
         return end_date
 
     def date_difference_validator(start_date: datetime.date, end_date: datetime.date) -> None:
-        if start_date + datetime.timedelta(days=1) > end_date:
+        if start_date > end_date:
             raise InvalidBodyException(INVALID_DATE_RANGE_PASSED)
