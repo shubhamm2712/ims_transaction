@@ -7,7 +7,7 @@ import datetime
 
 from ..config import logger
 from ..config.consts import PATH_PREFIX_TRANSACTION, TransactionRoutes, ORG
-from ..models.transaction import Transaction, TransactionDetails, TransactionItemDetails, ExceptionClass
+from ..models.transaction import Portfolio, TransactionDetails, ExceptionClass
 from ..service import CreateTransactionService, GetSpecificTransactions, GetAllTransactions
 from ..utils import VerifyToken, set_org_model, DateValidators, TransactionValidator
 
@@ -43,27 +43,27 @@ async def get_transaction(transaction_id: int, auth_result: Dict = Security(auth
     logger.debug("In get_transaction:"+str(transaction_id))
     return GetSpecificTransactions.get_transaction(transaction_id, auth_result[ORG])
 
-@apiRouter.get(TransactionRoutes.GET_ALL_TRANSACTIONS, response_model=List[Transaction], responses=auth_responses)
-async def get_all_transaction(start_date: Optional[datetime.date] = Depends(DateValidators.start_date_validator), end_date: Optional[datetime.date] = Depends(DateValidators.end_date_validator), auth_result: Dict = Security(auth.verify)) -> List[Transaction]:
+@apiRouter.get(TransactionRoutes.GET_ALL_TRANSACTIONS, response_model=Portfolio, responses=auth_responses)
+async def get_all_transaction(start_date: Optional[datetime.date] = Depends(DateValidators.start_date_validator), end_date: Optional[datetime.date] = Depends(DateValidators.end_date_validator), auth_result: Dict = Security(auth.verify)) -> Portfolio:
     logger.debug("In get_all_transaction: start_date:"+str(start_date),",end_date:"+str(end_date))
     return GetAllTransactions.get_all_transactions(start_date, end_date, auth_result[ORG])
     
-@apiRouter.get(TransactionRoutes.GET_TRANSACTION_BUY, response_model=List[Transaction], responses=auth_responses)
-async def get_transaction_buy(start_date: Optional[datetime.date] = Depends(DateValidators.start_date_validator), end_date: Optional[datetime.date] = Depends(DateValidators.end_date_validator), auth_result: Dict = Security(auth.verify)) -> List[Transaction]:
+@apiRouter.get(TransactionRoutes.GET_TRANSACTION_BUY, response_model=Portfolio, responses=auth_responses)
+async def get_transaction_buy(start_date: Optional[datetime.date] = Depends(DateValidators.start_date_validator), end_date: Optional[datetime.date] = Depends(DateValidators.end_date_validator), auth_result: Dict = Security(auth.verify)) -> Portfolio:
     logger.debug("In get_transaction_buy: start_date:"+str(start_date),",end_date:"+str(end_date))
     return GetAllTransactions.get_transactions_buy(start_date, end_date, auth_result[ORG])
     
-@apiRouter.get(TransactionRoutes.GET_TRANSACTION_SELL, response_model=List[Transaction], responses=auth_responses)
-async def get_transaction_sell(start_date: Optional[datetime.date] = Depends(DateValidators.start_date_validator), end_date: Optional[datetime.date] = Depends(DateValidators.end_date_validator), auth_result: Dict = Security(auth.verify)) -> List[Transaction]:
+@apiRouter.get(TransactionRoutes.GET_TRANSACTION_SELL, response_model=Portfolio, responses=auth_responses)
+async def get_transaction_sell(start_date: Optional[datetime.date] = Depends(DateValidators.start_date_validator), end_date: Optional[datetime.date] = Depends(DateValidators.end_date_validator), auth_result: Dict = Security(auth.verify)) -> Portfolio:
     logger.debug("In get_transaction_sell: start_date:"+str(start_date),",end_date:"+str(end_date))
     return GetAllTransactions.get_transactions_sell(start_date, end_date, auth_result[ORG])
     
-@apiRouter.get(TransactionRoutes.GET_TRANSACTION_CUSTOMER + "/{customer_id}", response_model=List[Transaction], responses=auth_responses)
-async def get_transaction_customer(customer_id: int, start_date: Optional[datetime.date] = Depends(DateValidators.start_date_validator), end_date: Optional[datetime.date] = Depends(DateValidators.end_date_validator), auth_result: Dict = Security(auth.verify)) -> List[Transaction]:
+@apiRouter.get(TransactionRoutes.GET_TRANSACTION_CUSTOMER + "/{customer_id}", response_model=Portfolio, responses=auth_responses)
+async def get_transaction_customer(customer_id: int, start_date: Optional[datetime.date] = Depends(DateValidators.start_date_validator), end_date: Optional[datetime.date] = Depends(DateValidators.end_date_validator), auth_result: Dict = Security(auth.verify)) -> Portfolio:
     logger.debug("In get_transaction_customer: customer_id:" + str(customer_id) + ",start_date:"+str(start_date),",end_date:"+str(end_date))
     return GetAllTransactions.get_transaction_customer(customer_id, start_date, end_date, auth_result[ORG])
     
-@apiRouter.get(TransactionRoutes.GET_TRANSACTION_PRODUCT + "/{product_id}", response_model=List[TransactionItemDetails], responses=auth_responses|bad_request_responses)
-async def get_transaction_product(product_id: int, start_date: Optional[datetime.date] = Depends(DateValidators.start_date_validator), end_date: Optional[datetime.date] = Depends(DateValidators.end_date_validator), auth_result: Dict = Security(auth.verify)) -> List[TransactionItemDetails]:
+@apiRouter.get(TransactionRoutes.GET_TRANSACTION_PRODUCT + "/{product_id}", response_model=Portfolio, responses=auth_responses|bad_request_responses)
+async def get_transaction_product(product_id: int, start_date: Optional[datetime.date] = Depends(DateValidators.start_date_validator), end_date: Optional[datetime.date] = Depends(DateValidators.end_date_validator), auth_result: Dict = Security(auth.verify)) -> Portfolio:
     logger.debug("In get_transaction_product: product_id:" + str(product_id) + ",start_date:"+str(start_date),",end_date:"+str(end_date))
     return GetSpecificTransactions.get_transaction_product(product_id, start_date, end_date, auth_result[ORG])

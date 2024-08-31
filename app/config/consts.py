@@ -19,9 +19,10 @@ LOG_FILE = "app/app.log"
 
 # Databases
 DB_ECHO = False
+DB_NAME = "imstransaction"
 
 # Service
-FLOATING_POINT_ERROR = 10e-4
+ROUNDING_FACTOR = 4
 
 # EXCEPTIONS
 INVALID_TRANSACTION_DETAILS_TYPE = "Invalid transaction details type"

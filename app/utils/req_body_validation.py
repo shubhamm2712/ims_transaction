@@ -1,6 +1,6 @@
 from datetime import date
 
-from ..config.consts import INVALID_TRANSACTION_DETAILS_TYPE, BUY, SELL, FLOATING_POINT_ERROR, INVALID_TRANSACTION_DETAILS_DO_NOT_MATCH
+from ..config.consts import INVALID_TRANSACTION_DETAILS_TYPE, BUY, SELL, ROUNDING_FACTOR, INVALID_TRANSACTION_DETAILS_DO_NOT_MATCH
 from ..exceptions import InvalidBodyException
 from ..models.transaction import Transaction, TransactionDetails, TransactionItem
 
@@ -32,7 +32,7 @@ class TransactionValidator:
             if type(transaction.totalAmount) != float and type(transaction.totalAmount) != int:
                 raise InvalidBodyException(INVALID_TRANSACTION_DETAILS_TYPE)
             else:
-                transaction.totalAmount = round(transaction.totalAmount, FLOATING_POINT_ERROR)
+                transaction.totalAmount = round(transaction.totalAmount, ROUNDING_FACTOR)
         if transaction.buyOrSell is not None:
             if type(transaction.buyOrSell) != str:
                 raise InvalidBodyException(INVALID_TRANSACTION_DETAILS_TYPE)
@@ -67,6 +67,6 @@ class TransactionValidator:
             if item.productId is None or item.quantity is None or item.rate is None:
                 raise InvalidBodyException(INVALID_TRANSACTION_DETAILS_TYPE)
             total_amount += item.quantity*item.rate
-        if round(total_amount, FLOATING_POINT_ERROR) != transaction.totalAmount:
+        if round(total_amount, ROUNDING_FACTOR) != transaction.totalAmount:
             raise InvalidBodyException(INVALID_TRANSACTION_DETAILS_DO_NOT_MATCH)
         return transaction

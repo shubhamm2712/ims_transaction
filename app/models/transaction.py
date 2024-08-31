@@ -1,6 +1,6 @@
 import datetime
 
-from typing import Optional, List
+from typing import Optional, List, Union
 from sqlmodel import SQLModel, Field, Relationship
 from pydantic import BaseModel
 
@@ -34,6 +34,14 @@ class TransactionDetails(TransactionBase):
 
 class TransactionItemDetails(TransactionItemBase):
     transaction: Optional["Transaction"] = None
+
+class Portfolio(BaseModel):
+    buyAmount: Optional[float] = None
+    sellAmount: Optional[float] = None
+    startDate: Optional[datetime.date] = None
+    endDate: Optional[datetime.date] = None
+
+    transactionsList: List[Union[Transaction, TransactionItemDetails]] = []
 
 class ExceptionClass(BaseModel):
     detail: str
