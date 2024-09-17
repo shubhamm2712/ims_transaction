@@ -1,6 +1,6 @@
 from datetime import date
 
-from ..config.consts import INVALID_TRANSACTION_DETAILS_TYPE, BUY, SELL, ROUNDING_FACTOR, INVALID_TRANSACTION_DETAILS_DO_NOT_MATCH
+from ..config.consts import INVALID_TRANSACTION_DETAILS_TYPE, BUY, SELL, ROUNDING_FACTOR, INVALID_TRANSACTION_DETAILS_DO_NOT_MATCH, INVOICE_NOT_FOUND
 from ..exceptions import InvalidBodyException
 from ..models.transaction import Transaction, TransactionDetails, TransactionItem
 
@@ -8,6 +8,13 @@ class TransactionValidator:
     def sanitize_trannsaction(transaction: Transaction):
         if transaction.id is not None:
             raise InvalidBodyException(INVALID_TRANSACTION_DETAILS_TYPE)
+        if transaction.invoiceNumber is not None:
+            if type(transaction.invoiceNumber) != str:
+                raise InvalidBodyException(INVALID_TRANSACTION_DETAILS_TYPE)
+            else:
+                transaction.invoiceNumber = transaction.invoiceNumber.strip()
+                if transaction.invoiceNumber == "":
+                    raise InvalidBodyException(INVOICE_NOT_FOUND)
         if transaction.date is not None:
             if type(transaction.date) != date:
                 raise InvalidBodyException(INVALID_TRANSACTION_DETAILS_TYPE)
@@ -59,7 +66,7 @@ class TransactionValidator:
 
     def add_validator(transaction: TransactionDetails):
         TransactionValidator.sanitize_trannsaction(transaction)
-        if transaction.date is None or transaction.customerId is None or transaction.totalAmount is None or transaction.buyOrSell is None:
+        if transaction.date is None or transaction.customerId is None or transaction.totalAmount is None or transaction.buyOrSell is None or transaction.invoiceNumber is None:
             raise InvalidBodyException(INVALID_TRANSACTION_DETAILS_TYPE)
         total_amount = 0
         for item in transaction.items:

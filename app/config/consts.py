@@ -27,6 +27,7 @@ ROUNDING_FACTOR = 4
 # EXCEPTIONS
 INVALID_TRANSACTION_DETAILS_TYPE = "Invalid transaction details type"
 INVALID_TRANSACTION_DETAILS_DO_NOT_MATCH = "Invalid transaction details do not match"
+INVOICE_NOT_FOUND = "Invoice Number not found"
 ORG_NOT_FOUND = "Org not found"
 INVALID_DATE_PASSED = "Invalid date passed"
 INVALID_DATE_RANGE_PASSED = "Invalid date range passed"

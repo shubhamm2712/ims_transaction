@@ -7,6 +7,7 @@ from pydantic import BaseModel
 class TransactionBase(SQLModel):
     id: Optional[int] = Field(default=None, primary_key=True)
     org: Optional[str] = None
+    invoiceNumber: Optional[str] = None 
     date: Optional[datetime.date] = None
     description: Optional[str] = None
     metaData: Optional[str] = None
